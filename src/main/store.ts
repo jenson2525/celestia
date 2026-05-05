@@ -1,49 +1,36 @@
 import fs from 'fs';
 import path from 'path';
 import { app } from 'electron';
-import { Game } from '../types/game';
+import { GameConfig } from '../types/game';
 
-// games.json 存储在系统用户数据目录下，避免与应用安装目录混用
-// C:\Users\{用户名}\AppData\Roaming\celestia\games.json
+// 用户配置的游戏路径
 const STORE_PATH = path.join(app.getPath('userData'), 'games.json');
 
-function loadGames(): Game[] {
+function loadConfigs(): GameConfig[] {
   try {
     const raw = fs.readFileSync(STORE_PATH, 'utf-8');
-    return JSON.parse(raw) as Game[];
+    return JSON.parse(raw) as GameConfig[];
   } catch {
-    return [];  // 文件不存在或内容损坏时，降级为空列表
+    return [];
   }
 }
 
-function saveGames(games: Game[]): void {
-  fs.writeFileSync(STORE_PATH, JSON.stringify(games, null, 2), 'utf-8');
+function saveConfigs(configs: GameConfig[]): void {
+  fs.writeFileSync(STORE_PATH, JSON.stringify(configs, null, 2), 'utf-8');
 }
 
-export function getGames(): Game[] {
-  return loadGames();
+export function getConfigs(): GameConfig[] {
+  return loadConfigs();
 }
 
-export function addGame(game: Game): Game[] {
-  const games = loadGames();
-  games.push(game);
-  saveGames(games);
-  return games;
-}
-
-export function updateGame(id: string, patch: Partial<Game>): Game[] {
-  const games = loadGames();
-  const index = games.findIndex((g) => g.id === id);
+export function saveGameConfig(id: string, exePath: string): GameConfig[] {
+  const configs = loadConfigs();
+  const index = configs.findIndex((c) => c.id === id);
   if (index !== -1) {
-    games[index] = { ...games[index], ...patch };
-    saveGames(games);
+    configs[index].exePath = exePath;
+  } else {
+    configs.push({ id, exePath });
   }
-  return games;
-}
-
-export function removeGame(id: string): Game[] {
-  const games = loadGames();
-  const filtered = games.filter((g) => g.id !== id);
-  saveGames(filtered);
-  return filtered;
+  saveConfigs(configs);
+  return configs;
 }

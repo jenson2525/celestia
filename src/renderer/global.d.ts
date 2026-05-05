@@ -1,14 +1,12 @@
-import { Game } from '../types/game';
+import { GameConfig } from '../types/game';
 
 declare global {
   interface Window {
     electronAPI: {
-      getGames: () => Promise<Game[]>;
-      saveGame: (game: Game) => Promise<Game[]>;
-      deleteGame: (id: string) => Promise<Game[]>;
+      getConfigs: () => Promise<GameConfig[]>;
+      saveConfig: (id: string, exePath: string) => Promise<GameConfig[]>;
       launchGame: (exePath: string) => Promise<void>;
       selectExeFile: () => Promise<string | null>;
-      selectImageFile: () => Promise<string | null>;
     };
   }
 }

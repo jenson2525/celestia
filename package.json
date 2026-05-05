@@ -7,7 +7,22 @@
     "build:main": "tsc",
     "build:renderer": "webpack",
     "build": "npm run build:main && npm run build:renderer",
-    "start": "npm run build && electron ."
+    "start": "npm run build && electron .",
+    "package": "npm run build && electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.celestia.app",
+    "productName": "Celestia",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "zip"
+    }
   },
   "keywords": [],
   "author": "",
@@ -16,8 +31,9 @@
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "css-loader": "^7.1.4",
+    "css-loader": "^7.1.2",
     "electron": "^41.5.0",
+    "electron-builder": "^26.0.12",
     "html-webpack-plugin": "^5.6.7",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.7",

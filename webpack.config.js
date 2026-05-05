@@ -16,6 +16,14 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        // 将图片文件复制到 dist/renderer/assets/ 并返回可用的文件路径
+        test: /\.(png|jpg|jpeg|webp|gif)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name][ext]',
+        },
+      },
     ],
   },
   resolve: {
