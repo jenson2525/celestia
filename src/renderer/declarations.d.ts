@@ -1,0 +1,1 @@
+declare module '*.css';  // 告知 TypeScript 允许导入 CSS 文件
